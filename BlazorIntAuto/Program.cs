@@ -26,13 +26,6 @@ builder.Services.AddRazorComponents()
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
 
-builder.Services.AddHttpClient("ExternalAPI",
-      client => client.BaseAddress = new Uri(builder.Configuration["ExternalApiBaseUrl"]))
-      .AddHttpMessageHandler<TokenHandler>();
-
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-  .CreateClient("ExternalAPI"));
-
 var app = builder.Build();
 app.MapControllers();
 
@@ -71,12 +64,6 @@ app.MapGet("/Account/Logout", async (HttpContext httpContext, string redirectUri
     await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
-
-app.MapGet("/api/externalData", async (HttpClient httpClient) =>
-{
-    return await httpClient.GetFromJsonAsync<int[]>("data");
-})
-.RequireAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

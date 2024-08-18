@@ -48,11 +48,4 @@
 
         ApiResponse = $"This data comes from an internal API: {string.Join(",", data)}";
     }
-
-    private async Task CallExternalApi()
-    {
-        var data = await Http.GetFromJsonAsync<int[]>("api/externalData");
-
-        ApiResponse = $"This data comes from an external API: {string.Join(",", data)}";
-    }
 }
