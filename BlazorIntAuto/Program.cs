@@ -28,12 +28,9 @@ builder.Services.AddRazorComponents()
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
 
-builder.Services.AddHttpClient("ExternalAPI",
+builder.Services.AddHttpClient("ServerAPI",
       client => client.BaseAddress = new Uri(builder.Configuration["BaseUrl"]))
       .AddHttpMessageHandler<TokenHandler>();
-
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-  .CreateClient("ExternalAPI"));
 
 var app = builder.Build();
 app.MapControllers();
